@@ -4,7 +4,7 @@
 
 As of 2025, there exists more than 20,000 bioinformatic tools, with more tools coming out each year.
 
-These programs are written by biologists, and are often not user-friendly, often with prohibitively complex installations and implementations, taking the user through multiple file formats. Combined with a culture of "publish and forget", many programs out there only cater to the specific needs of the research group. With a lack support, documentation, and given such a wide range of programs, hard-coding and integrating them all manually is unrealistic and unscaleable.
+These programs are written by biologists, and are often not user-friendly, often with prohibitively complex installations and implementations, taking the user through multiple file formats. Combined with a culture of "publish and forget", many programs out there only cater to the specific needs of the research group. With a lack of support, documentation, and given such a wide range of programs, hard-coding and integrating them all manually is unrealistic and unscaleable.
 
 Biohacker addresses this issue by leveraging the available literature to provide a convenient frontend agent, together with a scalable backend suite of agents. Together we get you through the myriad of programs whilst maintaining flexibility, reliability, and reproducibility in your analyses. 
 

@@ -16,14 +16,9 @@ Biohacker addresses this issue by leveraging the available literature to provide
 - 10 slides and 5min video
 
 ## Features
-- **Tool integration**: 
-<br>Get an overview of the tools suitable for your data, ask Biohacker about each tool's functionality, and seamlessly add them into your workflow
-<br>
-- **Real-time execution and monitoring**: 
-<br>Let Biohacker run your workflows automatically, whilst keeping you in the loop. Manually set parameters if needed
-<br>
-- **Reproducibility**: 
-<br>Keep a log of your workflow, execute it using different data sets to ensure reproducibility
+- **Tool integration**: Get an overview of the tools suitable for your data, ask Biohacker about each tool's functionality, and seamlessly add them into your workflow
+- **Real-time execution and monitoring**: Let Biohacker run your workflows automatically, whilst keeping you in the loop. Manually set parameters if needed
+- **Reproducibility**: Keep a log of your workflow, execute it using different data sets to ensure reproducibility
 
 <br>
 

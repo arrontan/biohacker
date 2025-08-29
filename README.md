@@ -54,12 +54,16 @@ Biohacker addresses this issue by leveraging the available literature to provide
 ---
 ## Installation
 
-### Prerequisites
-Make sure you have the following installed:
-- Python 3
-- pip
-
 ### Setup
+
+> **Optionally:** Create a virtual environment to store your dependencies
+```bash
+python -m venv .venv
+
+# macOS / Linux: source .venv/bin/activate
+# Windows (CMD): .venv\Scripts\activate.bat
+# Windows (PowerShell): .venv\Scripts\Activate.ps1
+```
 
 1. Clone the repository at https://github.com/arrontan/biohacker/
 ```bash
@@ -104,7 +108,4 @@ We are currently working on a friendlier web-app, as well as a downloadable appl
 This project is licensed under the [Apache 2.0](https://github.com/arrontan/biohacker/blob/main/LICENSE) license.
 
 ## Contributing 
-WIP
-
-## References
-WIP
+Contributors are welcome! Please fork this repo and create a pull request

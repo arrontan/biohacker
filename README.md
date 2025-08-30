@@ -28,6 +28,8 @@ Biohacker addresses this issue by leveraging the available literature to provide
 <br>
 
 **Upcoming features:**
+- Store user's input in memory
+- Search with images
 - Interactive workflow map with tool integration
 - Sharing and collaboration for workflows
 - Benchmarking against existing methods

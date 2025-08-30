@@ -1,4 +1,4 @@
-# Just a basic assistant first, but needs to be a KB assistant that can scrape and retrieve information
+# Includes Tavily tool to extract real time data
 
 from strands import Agent, tool
 from strands_tools import file_read, file_write, editor

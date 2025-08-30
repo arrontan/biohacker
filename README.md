@@ -10,7 +10,7 @@ Biohacker addresses this issue by leveraging the available literature to provide
 
 ## TODO
 - logo
-- src
+- src (data_cleaner, refine lit assistant prompt and add scraper tools, fix software agent by breaking it up and making workflow explicit)
 - req.txt file
 - streamlit/react webapp
 - 10 slides and 5min video
@@ -30,6 +30,7 @@ Biohacker addresses this issue by leveraging the available literature to provide
 **Upcoming features:**
 - Store user's input in memory
 - Search with images
+- Download software directly to local machine
 - Interactive workflow map with tool integration
 - Sharing and collaboration for workflows
 - Benchmarking against existing methods

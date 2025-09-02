@@ -6,14 +6,14 @@ A specialized Strands agent that is the orchestrator to utilize sub-agents and t
 
 """
 
+import json
 from strands import Agent
 from strands_tools import file_read, file_write, editor, workflow
 from data_cleaning_assistant import data_cleaning_assistant
 from software_assistant import software_assistant
 from literature_assistant import literature_assistant
 from no_expertise import general_assistant
-from code_researcher_assistant import code_researcher_assistant
-
+# from code_researcher_assistant import code_researcher_assistant
 
 # Define a focused system prompt for file operations
 BIOHACKER_PROMPT = """
@@ -36,9 +36,6 @@ You are Biohacker, a sophisticated research assistant designed to coordinate bio
    - If query is a summary of the user's research → Literature Agent
    - If query seeks to clarify information about which program to use → Literature Agent
    - If query involves a specified program → Software Agent
-       - If first time running Software Agent, run the Code Researcher Agent once and remember the context for future calls of the Software Agent
-       - If first time running Software Agent, break down the problem into smaller, manageable tasks, allocated to the tools you are provided, give the user a short table of the tasks and tools allocated, followed by a brief overview of your plan
-       - Keep Software Agent's memory updated with which step it is on and the context from the Code Researcher Agent with workflow tool, tell me explicitly if the tool is working as intended or not
    - If query is outside these specialized areas → General Assistant
    - For complex queries, coordinate multiple agents as needed
 
@@ -49,15 +46,32 @@ Always confirm your understanding before routing to ensure accurate assistance.
 biohacker_agent = Agent(
     system_prompt=BIOHACKER_PROMPT,
     callback_handler=None,
-    tools=[data_cleaning_assistant, software_assistant, literature_assistant, general_assistant, code_researcher_assistant],
+    tools=[data_cleaning_assistant, software_assistant, literature_assistant, general_assistant],
 )
 
 
 # Example usage
 if __name__ == "__main__":
-    print("\n🧬 Biohacker 🧬\n")
-    print("Tell me more about your research!")
-    print("Type 'exit' to quit.")
+    
+    print(
+        '''
+        \n🧬 Biohacker 🧬\n
+        
+    Tell me more about your research!
+    
+    I can:
+        1. Review the literature (compare between methods for RNASeq analysis)
+        2. Clean and analyze your data (upload a snippet of your data)
+        3. Guide you through software installation, setup and execution, eg:
+           - Molecular dynamics: GROMACS tutorial
+           - Structural bioinformatics: PyMOL tutorial
+           - Data visualisation: Volcano plot tutorial in R
+        4. Help you with file management, workflow automation and scripting
+        5. Ask me questions about basic biology
+
+    Type 'exit' to quit
+        '''
+    )
 
     # Interactive loop
     while True:
@@ -66,10 +80,16 @@ if __name__ == "__main__":
             if user_input.lower() == "exit":
                 print("\nGoodbye! 👋")
                 break
-
-            response = biohacker_agent(
-                user_input, 
-            )
+            
+            print("Thinking...")
+            # If the biohacker agent routes to the software_assistant, send a JSON shuttle
+            # so the software assistant can accept both prompt and followup without interactive input.
+            try:
+                # build a simple shuttle: main prompt is user_input, no followup yet
+                shuttle = json.dumps({"prompt": user_input, "followup": None})
+                response = biohacker_agent(shuttle)
+            except Exception:
+                response = biohacker_agent(user_input)
             
             # Extract and print only the relevant content from the specialized agent's response
             content = str(response)

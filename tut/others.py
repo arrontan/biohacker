@@ -216,3 +216,5 @@ def code_researcher(query: str) -> str:
     except Exception as e:
         # Return specific error message for literature queries
         return f"Error processing your query: {str(e)}"
+
+

@@ -9,11 +9,23 @@ These programs are written by biologists, and are often not user-friendly, often
 Biohacker addresses this issue by leveraging the available literature to provide a convenient frontend agent, together with a scalable backend suite of agents. Together we get you through the myriad of programs whilst maintaining flexibility, reliability, and reproducibility in your analyses. 
 
 ## TODO
-- logo
-- src (data_cleaner, refine lit assistant prompt and add scraper tools, fix software agent by breaking it up and making workflow explicit)
+- src 
+    - Madhu: 
+        - [ ] data_cleaner
+        - [ ] refine lit assistant prompt 
+        - [ ] add scraper tools to add on to knowledge base
+        - [x] add pubmed to test knowledge base
+        - [x] setup faiss knowledge base
+    - Arron: 
+        - [ ] try agent_graph/diagram, handoff_to_user, batch, browser, use_computer, swarm,
+        - [x] get all test cases working
+        - [ ] get the literature agent to fact check the output of code agent
+        - [x] fix software agent by breaking it up and making workflow explicit
+        - [x] setup overall src structure
 - req.txt file
 - streamlit/react webapp
 - 10 slides and 5min video
+- logo
 
 ## Features
 - **Tool integration**: 
@@ -30,15 +42,16 @@ Biohacker addresses this issue by leveraging the available literature to provide
 **Upcoming features:**
 - Store user's input in memory
 - Search with images
-- Download software directly to local machine
 - Interactive workflow map with tool integration
 - Sharing and collaboration for workflows
 - Benchmarking against existing methods
+- Download software directly to local machine
 
 **Current agents:**
 - Bioconductor (Suite of data analysis and visualisation packages for different -omics data)
 - GROMACS (Molecular simulation)
 - ImageJ (Image analysis)
+- PyMOL (Molecular visualisation)
 
 **Upcoming agents:**
 - Samtools (SNV identification in WGS data)

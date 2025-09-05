@@ -54,7 +54,6 @@ Your capabilities include:
     - If user wants to see the code without running it, provide the code snippets directly with explanation.
     - If user wants to explore different approaches, suggest alternative methods or tools.
     
-    - During 
     - End off with how the code fits into overall plan and scientific context
     - Near end of your plan, start reminding user to use you to clear files used in runtime
     - Ask user if they still need the files used in runtime, if not clear them.
@@ -64,62 +63,83 @@ Always prioritise accuracy and reliability in your findings, if there is not eno
 
 '''
 
+# Module-level summary prompt used by the conversation manager
+CUSTOM_SUMMARY_PROMPT = """
+You are summarizing a technical conversation. Create a concise bullet-point summary that:
+- Focuses on code changes, architectural decisions, and technical solutions
+- Preserves specific function names, file paths, and configuration details
+- Omits conversational elements and focuses on actionable information
+- Uses technical terminology appropriate for software development
+
+Format as bullet points without conversational language.
+"""
+
 # Create a file-focused agent with selected tools
 @tool
 def software_assistant(user_input):
-
-    # Custom system prompt for technical conversations
-    custom_system_prompt = """
-    You are summarizing a technical conversation. Create a concise bullet-point summary that:
-    - Focuses on code changes, architectural decisions, and technical solutions
-    - Preserves specific function names, file paths, and configuration details
-    - Omits conversational elements and focuses on actionable information
-    - Uses technical terminology appropriate for software development
-
-    Format as bullet points without conversational language.
-    """
-
+    # Conversation manager uses the module-level summary prompt
     conversation_manager = SummarizingConversationManager(
-        summarization_system_prompt=custom_system_prompt
+        summarization_system_prompt=CUSTOM_SUMMARY_PROMPT
     )
 
-    software_agent= Agent(
+    software_agent = Agent(
         system_prompt=SOFTWARE_ASSISTANT_SYSTEM_PROMPT,
         callback_handler=None,
         tools=[code_researcher_assistant, python_repl, shell, file_read, file_write, editor, handoff_to_user, http_request],
-        conversation_manager=conversation_manager
+        conversation_manager=conversation_manager,
     )
 
+    # Run the agent once for the provided user_input and return the stringified response
+    try:
+        response = software_agent(user_input)
+    except Exception:
+        # Fallback to string input if the agent expects a different shape
+        response = software_agent(str(user_input))
+
+    return str(response)
+
+
+def software_assistant_cli():
+    """Run the software assistant in an interactive CLI loop.
+
+    This keeps the @tool `software_assistant` function single-shot for the main agent
+    while providing a convenient local REPL for human-driven sessions.
+    """
+    conversation_manager = SummarizingConversationManager(
+        summarization_system_prompt=CUSTOM_SUMMARY_PROMPT
+    )
+
+    software_agent = Agent(
+        system_prompt=SOFTWARE_ASSISTANT_SYSTEM_PROMPT,
+        callback_handler=None,
+        tools=[code_researcher_assistant, python_repl, shell, file_read, file_write, editor, handoff_to_user, http_request],
+        conversation_manager=conversation_manager,
+    )
+
+    print("\nSoftware Assistant interactive mode. Type 'exit' to quit.\n")
     while True:
         try:
-            print("Press enter to continue")
-            user_input_software = input("\n> ")
-            if user_input_software.lower() == "exit":
-                print("Sending you back to Biohacker")
+            user_input_software = input("> ")
+            if user_input_software is None:
+                continue
+            if user_input_software.lower().strip() == "exit":
+                print("Exiting interactive mode.")
                 break
-            if user_input_software == "":
-                user_input_software = """
-                    If you must have more information from me and not a boolean yes or no, prompt me again but with short focused question. Increase the stress on why this is essential to your understanding. This is NOT a permission or confirmation.
-                    If you have already prompted me more than 1 times, just print out the defaults and assumptions you will be using addressing your latest prompt.
-                    Give me a code preview
-                    """
 
-# If and only if you are confident in your understanding AND you have printed a separate prompt with only code, I am explicitly giving you permission to proceed with first suggestion, or to execute your code
-                    
+            # Run the agent on the provided input and print the result
+            try:
+                response = software_agent(user_input_software)
+            except Exception:
+                response = software_agent(str(user_input_software))
 
-            response = software_agent(
-                (f'''You are helping user with {user_input}.
-                If you have no previous conversation, run as per normal and ignore the rest of this prompt.
-                If you have given a prompt, the user's response is: {user_input_software}''')
-            )
-            
-            # Extract and print only the relevant content from the specialized agent's response
-            content = str(response)
-            print(content)
-            
+            print(str(response))
+
         except KeyboardInterrupt:
-            print("\n\nExecution interrupted. Exiting...")
+            print("\nInterrupted. Exiting interactive mode.")
             break
         except Exception as e:
-            print(f"\nAn error occurred: {str(e)}")
-            print("Please try asking a different question.")
+            print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    software_assistant_cli()

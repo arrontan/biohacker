@@ -8,12 +8,13 @@ A specialized Strands agent that is the orchestrator to utilize sub-agents and t
 
 import json
 from strands import Agent
-from strands_tools import file_read, file_write, editor, workflow
+from strands_tools import file_read, file_write, editor, workflow, handoff_to_user
 from data_cleaning_assistant import data_cleaning_assistant
 from software_assistant import software_assistant
 from literature_assistant import literature_assistant
 from no_expertise import general_assistant
 # from code_researcher_assistant import code_researcher_assistant
+
 
 # Define a focused system prompt for file operations
 BIOHACKER_PROMPT = """
@@ -32,7 +33,7 @@ You are Biohacker, a sophisticated research assistant designed to coordinate bio
    - Ensure cohesive responses when multiple agents are needed
 
 3. Decision Protocol:
-   - If query contains data, data cleaning tasks, or data cleaning is needed → Data cleaning Agent
+   - If query involves data, file manipulation, data cleaning tasks, or data cleaning is needed → Data cleaning Agent
    - If query is a summary of the user's research → Literature Agent
    - If query seeks to clarify information about which program to use → Literature Agent
    - If query involves a specified program → Software Agent
@@ -46,10 +47,10 @@ Always confirm your understanding before routing to ensure accurate assistance.
 biohacker_agent = Agent(
     system_prompt=BIOHACKER_PROMPT,
     callback_handler=None,
-    tools=[data_cleaning_assistant, software_assistant, literature_assistant, general_assistant],
+    tools=[data_cleaning_assistant, software_assistant, literature_assistant, general_assistant, handoff_to_user],
 )
 
-
+''''''
 # Example usage
 if __name__ == "__main__":
     
@@ -59,15 +60,17 @@ if __name__ == "__main__":
         
     Tell me more about your research!
     
-    I can:
-        1. Review the literature (compare between methods for RNASeq analysis)
-        2. Clean and analyze your data (upload a snippet of your data)
-        3. Guide you through software installation, setup and execution, eg:
-           - Molecular dynamics: GROMACS tutorial
-           - Structural bioinformatics: PyMOL tutorial
-           - Data visualisation: Volcano plot tutorial in R
-        4. Help you with file management, workflow automation and scripting
-        5. Ask me questions about basic biology
+    I can help you:
+    1. Review the literature, try: 
+        - Best tools for simulating molecular dynamics?
+        - How can I compare between different homologs of a protein?
+        - What visualisation is best used for showing gene expression data?
+    2. Guide you through software installation, setup, and execution, try:
+        - Molecular dynamics: GROMACS tutorial
+        - Sequence analysis: ClustalW tutorial
+        - Data visualisation: Volcano plot tutorial in R
+    3. Ask me questions about basic biology
+    4. Help you with file management, workflow automation and scripting
 
     Type 'exit' to quit
         '''

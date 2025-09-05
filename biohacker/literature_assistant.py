@@ -2,6 +2,7 @@
 
 from strands import Agent, tool
 from strands_tools import file_read, file_write, editor
+from strands_tools.tavily import tavily_search, tavily_extract, tavily_crawl, tavily_map
 import json
 
 LITERATURE_ASSISTANT_SYSTEM_PROMPT = """
@@ -42,12 +43,13 @@ def literature_assistant(query: str) -> str:
     # Format the query with specific guidance for the literature assistant
     formatted_query = f"Analyze and respond to this biological query, providing clear explanations with examples with clear citations where appropriate: {query}"
     
+
     try:
         print("Searching literature database...")
 
         literature_agent = Agent(
             system_prompt=LITERATURE_ASSISTANT_SYSTEM_PROMPT,
-            tools=[editor, file_read, file_write],
+            tools=[editor, file_read, file_write, tavily_search, tavily_extract, tavily_crawl, tavily_map],
         )
         agent_response = literature_agent(formatted_query)
         text_response = str(agent_response)

@@ -15,6 +15,10 @@ tqdm
 uv
 strands-agents>=1.0.0
 strands-agents-tools>=0.2.0
+bedrock-agentcore
+bedrock-agentcore-starter-toolkit
+streamlit
+
 opencv-python
 pyautogui
 

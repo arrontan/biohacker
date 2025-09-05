@@ -17,6 +17,10 @@ Biohacker addresses this issue by leveraging the available literature to provide
         - [x] add pubmed to test knowledge base
         - [x] setup faiss knowledge base
     - Arron: 
+        - [ ] make UI, fix enter bug
+        - [ ] make it usable on windows (maybe docker?)
+        - [ ] make output stream async
+        - [ ] split software_assistant, see if it runs faster
         - [ ] try agent_graph/diagram, handoff_to_user, batch, browser, use_computer, swarm,
         - [x] get all test cases working
         - [ ] get the literature agent to fact check the output of code agent
@@ -47,25 +51,22 @@ Biohacker addresses this issue by leveraging the available literature to provide
 - Benchmarking against existing methods
 - Download software directly to local machine
 
-**Current agents:**
+**Current software tested:**
 - Bioconductor (Suite of data analysis and visualisation packages for different -omics data)
 - GROMACS (Molecular simulation)
 - ImageJ (Image analysis)
 - PyMOL (Molecular visualisation)
 
-**Upcoming agents:**
-- Samtools (SNV identification in WGS data)
-- BEDTools (ChIPseq data)
-- GATK, DNAnexus, Illumina (Variant discovery in sequencing data)
-- Autodock, Vina (Molecular docking simulations)
-- And many more!
-
-
 **Other bioinformatic tool databases that may be helpful:**
-- [Bio tools](bio.tools)
+- [Nature Methods](https://www.nature.com/nmeth/)
+- [PubMed](https://pubmed.ncbi.nlm.nih.gov/)
+- [GenBank](https://www.ncbi.nlm.nih.gov/genbank/)
+- [PROSITE](https://prosite.expasy.org/)
+- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+- [bio.tools](https://bio.tools/)
 - [NAR Database](https://www.oxfordjournals.org/nar/database/c/)
 - [OBRC](https://www.hsls.pitt.edu/obrc/)
-- [Startbioinfo](startbioinfo.org)
+- [StartBioInfo](https://startbioinfo.org/)
 
 ---
 ## Installation
@@ -91,6 +92,13 @@ git clone https://github.com/arrontan/biohacker/
 pip install -r requirements.txt
 ```
 
+3. Enable Strands Console Mode and run the agent.py file
+```bash
+export STRANDS_TOOL_CONSOLE_MODE=enabled
+python3 biohacker/agent.py
+```
+We are currently working on a friendlier web-app, as well as a downloadable application, so do stay tuned!
+
 > **Note:** Ensure that you have the required API keys configured in your environment before using the tool.
 
 #### Linux/MacOS (bash)
@@ -113,12 +121,7 @@ set AWS_ACCESS_KEY_ID=your_access_key_id
 set AWS_SECRET_ACCESS_KEY=your_secret_access_key
 set AWS_SESSION_TOKEN=your_session_token # Optional
 ```
-## Usage
-To start using the project, run the following command in the terminal:
-```bash
-python agent.py
-```
-We are currently working on a friendlier web-app, as well as a downloadable application, so do stay tuned!
+
 
 ## License
 This project is licensed under the [Apache 2.0](https://github.com/arrontan/biohacker/blob/main/LICENSE) license.

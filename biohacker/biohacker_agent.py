@@ -85,16 +85,7 @@ if __name__ == "__main__":
                 break
             
             print("Thinking...")
-            # If the biohacker agent routes to the software_assistant, send a JSON shuttle
-            # so the software assistant can accept both prompt and followup without interactive input.
-            try:
-                # build a simple shuttle: main prompt is user_input, no followup yet
-                shuttle = json.dumps({"prompt": user_input, "followup": None})
-                response = biohacker_agent(shuttle)
-            except Exception:
-                response = biohacker_agent(user_input)
-            
-            # Extract and print only the relevant content from the specialized agent's response
+            response = biohacker_agent(user_input)
             content = str(response)
             print(content)
             

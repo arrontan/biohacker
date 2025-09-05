@@ -1,0 +1,425 @@
+
+[2025-09-05T16:24:09.054355] Python REPL Error:
+Code:
+import os
+import subprocess
+
+# Check current working directory
+print("Current working directory:", os.getcwd())
+
+# Try to run basic system commands
+try:
+    result = subprocess.run(['which', 'gmx'], capture_output=True, text=True)
+    print("which gmx result:")
+    print("stdout:", result.stdout)
+    print("stderr:", result.stderr)
+    print("return code:", result.returncode)
+except Exception as e:
+    print("Error running 'which gmx':", e)
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-05T16:24:40.242861] Python REPL Error:
+Code:
+import os
+print("Current working directory:", os.getcwd())
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-05T16:31:10.087643] Python REPL Error:
+Code:
+import subprocess
+import os
+
+# Function to run shell commands safely
+def run_command(cmd):
+    try:
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+        return f"Command: {cmd}\nReturn code: {result.returncode}\nOutput:\n{result.stdout}\nError:\n{result.stderr}"
+    except Exception as e:
+        return f"Command: {cmd}\nError: {str(e)}"
+
+# List of commands to run
+commands = [
+    "cat /etc/os-release",
+    "uname -a", 
+    "which apt-get",
+    "which yum",
+    "which dnf", 
+    "which pacman",
+    "which zypper",
+    "arch",
+    "lscpu | head -20"
+]
+
+print("=== Linux System Information Check ===\n")
+
+for cmd in commands:
+    print("="*50)
+    result = run_command(cmd)
+    print(result)
+    print()
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-05T16:31:38.373990] Python REPL Error:
+Code:
+import subprocess
+import os
+
+# Function to run shell commands safely
+def run_command(cmd):
+    try:
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+        return f"Command: {cmd}\nReturn code: {result.returncode}\nOutput:\n{result.stdout}\nError:\n{result.stderr}"
+    except Exception as e:
+        return f"Command: {cmd}\nError: {str(e)}"
+
+# Test with a simple command first
+print("Testing system access...")
+result = run_command("echo 'System check starting'")
+print(result)
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-05T16:33:12.514598] Python REPL Error:
+Code:
+import platform
+import os
+
+# Get basic system information using Python's platform module
+print("=== Python Platform Information ===")
+print(f"System: {platform.system()}")
+print(f"Node: {platform.node()}")
+print(f"Release: {platform.release()}")
+print(f"Version: {platform.version()}")
+print(f"Machine: {platform.machine()}")
+print(f"Processor: {platform.processor()}")
+print(f"Architecture: {platform.architecture()}")
+print(f"Platform: {platform.platform()}")
+
+print("\n=== Python OS Information ===")
+print(f"OS name: {os.name}")
+print(f"Process ID: {os.getpid()}")
+print(f"User ID: {os.getuid()}")
+print(f"Group ID: {os.getgid()}")
+print(f"Current working directory: {os.getcwd()}")
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-05T23:59:13.044032] Python REPL Error:
+Code:
+import sys
+import platform
+import subprocess
+import os
+
+print("=== SYSTEM INFORMATION ===")
+print(f"Operating System: {platform.system()} {platform.release()}")
+print(f"Architecture: {platform.machine()}")
+print(f"Python Version: {sys.version}")
+print(f"Python Executable: {sys.executable}")
+print(f"Current Working Directory: {os.getcwd()}")
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-06T00:00:06.027540] Python REPL Error:
+Code:
+import sys
+import platform
+import os
+
+# Basic system information
+print("=== SYSTEM INFORMATION ===")
+print(f"OS: {platform.system()} {platform.release()}")
+print(f"Architecture: {platform.machine()}")
+print(f"Python: {sys.version.split()[0]}")
+print(f"Working Directory: {os.getcwd()}")
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+
+
+[2025-09-06T00:09:24.103058] Python REPL Error:
+Code:
+# Let's start by checking system information through Python since shell seems to have issues
+import os
+import subprocess
+import platform
+
+print("=== System Information ===")
+print(f"Platform: {platform.platform()}")
+print(f"Python version: {platform.python_version()}")
+print(f"Architecture: {platform.architecture()}")
+
+# Check if we can run shell commands
+try:
+    result = subprocess.run(['ls', '/etc/os-release'], capture_output=True, text=True, timeout=10)
+    if result.returncode == 0:
+        print("\n=== Linux Distribution ===")
+        with open('/etc/os-release', 'r') as f:
+            print(f.read())
+    else:
+        print("Could not detect Linux distribution")
+except Exception as e:
+    print(f"Error checking system: {e}")
+
+# Check for GROMACS
+try:
+    result = subprocess.run(['which', 'gmx'], capture_output=True, text=True, timeout=5)
+    if result.returncode == 0:
+        print(f"\n=== GROMACS Found ===")
+        print(f"GROMACS location: {result.stdout.strip()}")
+    else:
+        print("\n=== GROMACS Not Found ===")
+        print("Will need to install GROMACS")
+except Exception as e:
+    print(f"Error checking GROMACS: {e}")
+Error:
+Traceback (most recent call last):
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/python_repl.py", line 595, in python_repl
+    user_input = get_user_input(
+                 ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 70, in get_user_input
+    result = loop.run_until_complete(get_user_input_async(prompt, default, keyboard_interrupt_return_default))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 44, in get_user_input_async
+    return await _get_input()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/strands_tools/utils/user_input.py", line 31, in _get_input
+    with patch_stdout(raw=True):
+  File "/usr/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 58, in patch_stdout
+    with StdoutProxy(raw=raw) as proxy:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/patch_stdout.py", line 115, in __init__
+    self._output: Output = self.app_session.output
+                           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/application/current.py", line 67, in output
+    self._output = create_output()
+                   ^^^^^^^^^^^^^^^
+  File "/home/arn365/Documents/biohacker/.venv/lib/python3.12/site-packages/prompt_toolkit/output/defaults.py", line 98, in create_output
+    if not stdout.isatty():
+           ^^^^^^^^^^^^^
+AttributeError: 'StdoutBridge' object has no attribute 'isatty'
+

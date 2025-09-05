@@ -2,6 +2,7 @@ import os
 import uuid
 import streamlit as st
 from biohacker_agent import biohacker_agent
+from software_assistant import software_assistant
 import asyncio
 import threading
 import queue
@@ -150,11 +151,9 @@ if file_names:
                     reply = biohacker_agent(shuttle)
                 except Exception:
                     reply = biohacker_agent(str(shuttle))
-            # normalize reply to a readable string, store and display once
-            reply_text = normalize_reply(reply)
-            st.session_state.messages.append(("assistant", reply_text))
+            st.session_state.messages.append(("assistant", reply))
             with st.chat_message("assistant"):
-                st.markdown(reply_text)
+                st.markdown(reply)
 
 user_input = st.chat_input("Type your message here...")
 

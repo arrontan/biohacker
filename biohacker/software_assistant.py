@@ -123,3 +123,48 @@ def software_assistant(user_input):
         except Exception as e:
             print(f"\nAn error occurred: {str(e)}")
             print("Please try asking a different question.")
+
+def software_assistant_cli():
+    """Run the software assistant in an interactive CLI loop.
+
+    This keeps the @tool `software_assistant` function single-shot for the main agent
+    while providing a convenient local REPL for human-driven sessions.
+    """
+    conversation_manager = SummarizingConversationManager(
+        summarization_system_prompt=CUSTOM_SUMMARY_PROMPT
+    )
+
+    software_agent = Agent(
+        system_prompt=SOFTWARE_ASSISTANT_SYSTEM_PROMPT,
+        callback_handler=None,
+        tools=[code_researcher_assistant, python_repl, shell, file_read, file_write, editor, handoff_to_user, http_request],
+        conversation_manager=conversation_manager,
+    )
+
+    print("\nSoftware Assistant interactive mode. Type 'exit' to quit.\n")
+    while True:
+        try:
+            user_input_software = input("> ")
+            if user_input_software is None:
+                continue
+            if user_input_software.lower().strip() == "exit":
+                print("Exiting interactive mode.")
+                break
+
+            # Run the agent on the provided input and print the result
+            try:
+                response = software_agent(user_input_software)
+            except Exception:
+                response = software_agent(str(user_input_software))
+
+            print(str(response))
+
+        except KeyboardInterrupt:
+            print("\nInterrupted. Exiting interactive mode.")
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+
+
+if __name__ == "__main__":
+    software_assistant_cli()

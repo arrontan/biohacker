@@ -211,3 +211,6 @@ __marimo__/
 /temp/
 /tmp/
 /logs/
+
+# Node modules
+/frontend/next-app/node_modules/

@@ -73,7 +73,7 @@ Biohacker addresses this issue by leveraging the available literature to provide
 
 ### Setup
 
-> **Optionally:** Create a virtual environment to store your dependencies
+> **Optionally:** Create a virtual environment to store your dependencies (activated by default with .envrc)
 ```bash
 python -m venv .venv
 
@@ -92,7 +92,7 @@ git clone https://github.com/arrontan/biohacker/
 pip install -r requirements.txt
 ```
 
-3. Enable Strands Console Mode and run the agent.py file
+3. Enable Strands Console Mode (enabled by default in the .venv activation script) and run the agent.py file
 ```bash
 export STRANDS_TOOL_CONSOLE_MODE=enabled
 python3 biohacker/agent.py

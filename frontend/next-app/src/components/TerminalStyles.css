@@ -5,3 +5,7 @@
   border-radius: 4px;
   overflow: hidden;
 }
+
+.sidebar-toggle-button {
+  position: absolute;
+}

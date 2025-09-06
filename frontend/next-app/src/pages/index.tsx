@@ -1,5 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
+import Sidebar from '../components/Sidebar';
 
 // load xterm component dynamically to avoid SSR issues
 const Terminal = dynamic(() => import('../components/Terminal'), { ssr: false });
@@ -12,6 +13,7 @@ export default function Home() {
       <div style={{ border: '1px solid #ddd', borderRadius: 6, padding: 8 }}>
         <Terminal />
       </div>
+      <Sidebar onUpload={(info) => { console.log('uploaded', info); }} />
     </div>
   );
 }

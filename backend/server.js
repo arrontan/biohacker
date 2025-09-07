@@ -1,7 +1,18 @@
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
-const pty = require('node-pty');
+let pty = null;
+try {
+  pty = require('node-pty');
+} catch (e) {
+  console.warn('node-pty native require failed, trying prebuilt fallback:', e && e.message);
+  try {
+    pty = require('node-pty-prebuilt-multiarch');
+  } catch (e2) {
+    console.error('prebuilt node-pty fallback also failed:', e2 && e2.message);
+    throw e; // rethrow the original error so the process still fails loudly
+  }
+}
 const path = require('path');
 
 const app = express();

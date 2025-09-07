@@ -270,3 +270,4 @@ pnpm-lock.yaml
 *.tar.gz
 *.tgz
 *.node
+node_modules

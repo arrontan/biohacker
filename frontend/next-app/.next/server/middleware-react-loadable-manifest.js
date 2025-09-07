@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST="{\"index.tsx -> ../components/Terminal\":{\"id\":\"index.tsx -> ../components/Terminal\",\"files\":[\"static/chunks/src_components_Terminal_tsx.js\"]}}"

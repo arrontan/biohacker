@@ -1,6 +1,4 @@
 aws-opentelemetry-distro>=0.10.0
-bedrock-agentcore
-bedrock-agentcore-starter-toolkit
 boto3
 litellm
 mcp[cli]
@@ -9,7 +7,7 @@ opensearch-py
 pandas
 retrying
 strands-agents 
-strands-agents-tools[mem0_memory]
+strands-agents-tools
 streamlit
 tqdm
 uv

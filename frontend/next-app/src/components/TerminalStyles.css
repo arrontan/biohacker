@@ -16,8 +16,8 @@
   --bg: #0b0b0f;
   --card: #071016;
   --muted: #8aa0a0;
-  --accent: #39ff14; /* neon green */
-  --accent-2: #7bdff6; /* cyan */
+  --accent: #b100ff; /* neon purple */
+  --accent-2: #ff7bff; /* pinkish-purple */
   --glass: rgba(255,255,255,0.03);
 }
 
@@ -46,7 +46,7 @@ html, body, #__next {
 
 .emoji {
   font-size: 32px;
-  filter: drop-shadow(0 0 8px rgba(57,255,20,0.45));
+  filter: drop-shadow(0 0 8px rgba(177,0,255,0.45));
 }
 
 .brand {
@@ -54,7 +54,7 @@ html, body, #__next {
   letter-spacing: 2px;
   text-transform: lowercase;
   color: var(--accent);
-  text-shadow: 0 0 8px rgba(57,255,20,0.25), 0 1px 0 rgba(0,0,0,0.6);
+  text-shadow: 0 0 12px rgba(177,0,255,0.30), 0 1px 0 rgba(0,0,0,0.6);
 }
 
 .subtitle {
@@ -113,7 +113,7 @@ html, body, #__next {
 .sidebar-title { color: var(--accent-2); margin-top: 4px; }
 .file-input { display: block; margin-top: 8px; }
 .sidebar-actions { margin-top: 10px; }
-.btn { background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(57,255,20,0.03)); border: 1px solid rgba(57,255,20,0.08); color: var(--accent); padding: 6px 10px; border-radius: 6px; }
+.btn { background: linear-gradient(180deg, rgba(177,0,255,0.06), rgba(177,0,255,0.03)); border: 1px solid rgba(177,0,255,0.08); color: var(--accent); padding: 6px 10px; border-radius: 6px; }
 .btn-ghost { margin-left: 8px; background: transparent; border: 1px solid rgba(255,255,255,0.03); color: var(--muted); }
 .files-list { max-height: 160px; overflow: auto; margin-top: 6px; font-size: 13px; }
 .file-row { margin-bottom: 6px; }

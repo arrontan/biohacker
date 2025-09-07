@@ -19,29 +19,23 @@ if not os.path.exists(AGENT):
 # backend) and make a naive guard around some file operations to avoid accidental
 # access outside the uploads directory in dev. This is not a security boundary
 # for untrusted code, but it stops the normal agent from touching other files.
-UPLOAD_DIR = os.environ.get('UPLOAD_DIR') or os.path.join(ROOT, 'backend', 'uploads')
-UPLOAD_DIR = os.path.abspath(UPLOAD_DIR)
-
+# For the POC/hackathon we don't restrict file I/O. Run the agent from the
+# repository root so relative imports and file access behave as they would in
+# normal development.
 try:
-    os.chdir(UPLOAD_DIR)
+    os.chdir(ROOT)
 except Exception:
-    # if we can't chdir, continue; most operations will fail later and that's
-    # acceptable for development.
     pass
 
-_orig_open = builtins.open
-
-def _restricted_open(file, mode='r', *args, **kwargs):
-    # resolve path and ensure it lives under UPLOAD_DIR
-    try:
-        p = os.path.abspath(os.path.join(os.getcwd(), file))
-    except Exception:
-        p = os.path.abspath(file)
-    if not p.startswith(UPLOAD_DIR + os.sep) and p != UPLOAD_DIR:
-        raise PermissionError('access to path outside upload dir is restricted: ' + p)
-    return _orig_open(p, mode, *args, **kwargs)
-
-builtins.open = _restricted_open
-
 # run the agent in-process so it inherits our cwd/env restrictions
+# Ensure the repository root is on sys.path so `from biohacker import ...` works
+# even when we chdir into the uploads directory above.
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+# Also add the inner `biohacker` package directory so modules imported as
+# top-level names (e.g. `import code_researcher_assistant`) can be found.
+BIOHACKER_PKG_DIR = os.path.join(ROOT, 'biohacker')
+if BIOHACKER_PKG_DIR not in sys.path:
+    sys.path.insert(0, BIOHACKER_PKG_DIR)
+
 runpy.run_path(AGENT, run_name='__main__')

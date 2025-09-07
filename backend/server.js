@@ -71,7 +71,20 @@ wss.on('connection', (ws, req) => {
 
   // Resolve the python runner script relative to repo
   const runnerPath = path.resolve(__dirname, '..', 'python', 'runner', 'agent_runner.py');
-  const pythonBin = process.env.PYTHON_BIN || 'python3';
+  // Prefer an explicit PYTHON_BIN, otherwise fall back to the project's
+  // .venv python if present, then to system python3. This makes starting
+  // the backend with `npm start` still pick up the project's virtualenv.
+  let pythonBin = process.env.PYTHON_BIN || null;
+  try {
+    const venvPython = require('path').resolve(__dirname, '..', '.venv', 'bin', 'python');
+    const fs = require('fs');
+    if (!pythonBin && fs.existsSync(venvPython) && fs.statSync(venvPython).mode & 0o111) {
+      pythonBin = venvPython;
+    }
+  } catch (e) {
+    // ignore
+  }
+  if (!pythonBin) pythonBin = process.env.PYTHON_BIN || 'python3';
 
   console.log('pty: spawn requested', { pythonBin, runnerPath });
 

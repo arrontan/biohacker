@@ -9,3 +9,114 @@
 .sidebar-toggle-button {
   position: absolute;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+/* App layout and retro styling */
+:root {
+  --bg: #0b0b0f;
+  --card: #071016;
+  --muted: #8aa0a0;
+  --accent: #39ff14; /* neon green */
+  --accent-2: #7bdff6; /* cyan */
+  --glass: rgba(255,255,255,0.03);
+}
+
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg,#020204 0%, #071018 60%);
+  color: #cfeeea;
+  font-family: "VT323", "Courier New", monospace;
+}
+
+.app-wrapper {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 16px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.emoji {
+  font-size: 32px;
+  filter: drop-shadow(0 0 8px rgba(57,255,20,0.45));
+}
+
+.brand {
+  font-size: 28px;
+  letter-spacing: 2px;
+  text-transform: lowercase;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(57,255,20,0.25), 0 1px 0 rgba(0,0,0,0.6);
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.terminal-card {
+  border-radius: 8px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* small responsive tweaks */
+@media (max-width: 640px) {
+  .brand { font-size: 22px; }
+  .emoji { font-size: 26px; }
+}
+
+/* Sidebar retro styles */
+.sidebar {
+  position: fixed;
+  right: -340px;
+  top: 80px;
+  width: 320px;
+  height: 70vh;
+  background: linear-gradient(180deg, rgba(10,12,14,0.95), rgba(8,10,12,0.9));
+  border-left: 1px solid rgba(255,255,255,0.04);
+  padding: 14px;
+  box-shadow: -6px 12px 40px rgba(0,0,0,0.6);
+  border-radius: 8px 0 0 8px;
+  transition: right 240ms ease;
+  color: var(--muted);
+  z-index: 60;
+}
+
+.sidebar.open { right: 8px; }
+
+.sidebar-toggle {
+  position: absolute;
+  left: -40px;
+  top: 10px;
+  width: 36px;
+  height: 36px;
+  background: var(--card);
+  color: var(--accent);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+}
+
+.sidebar-title { color: var(--accent-2); margin-top: 4px; }
+.file-input { display: block; margin-top: 8px; }
+.sidebar-actions { margin-top: 10px; }
+.btn { background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(57,255,20,0.03)); border: 1px solid rgba(57,255,20,0.08); color: var(--accent); padding: 6px 10px; border-radius: 6px; }
+.btn-ghost { margin-left: 8px; background: transparent; border: 1px solid rgba(255,255,255,0.03); color: var(--muted); }
+.files-list { max-height: 160px; overflow: auto; margin-top: 6px; font-size: 13px; }
+.file-row { margin-bottom: 6px; }
+.file-row a { color: var(--accent-2); text-decoration: none; }
+.no-files { color: rgba(255,255,255,0.18); }
+.sidebar-status { margin-top: 8px; font-size: 13px; color: var(--muted); }

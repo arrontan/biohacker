@@ -33,6 +33,15 @@ else
   echo "Warning: venv activate not found at $VENV_ACTIVATE -- continuing without venv"
 fi
 
+# If PYTHON_BIN isn't explicitly set, prefer the project's venv python so the
+# backend spawns the same interpreter that has the project's packages.
+if [ -z "${PYTHON_BIN:-}" ]; then
+  if [ -x "$REPO_ROOT/.venv/bin/python" ]; then
+    export PYTHON_BIN="$REPO_ROOT/.venv/bin/python"
+    echo "Auto-set PYTHON_BIN=$PYTHON_BIN"
+  fi
+fi
+
 cd "$BACKEND_DIR"
 echo "Starting backend (logs -> $LOG_FILE)"
 nohup npm start > "$LOG_FILE" 2>&1 &

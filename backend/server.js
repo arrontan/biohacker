@@ -1,25 +1,101 @@
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
-const pty = require('node-pty');
+let pty = null;
+try {
+  pty = require('node-pty');
+} catch (e) {
+  console.warn('node-pty native require failed, trying prebuilt fallback:', e && e.message);
+  try {
+    pty = require('node-pty-prebuilt-multiarch');
+  } catch (e2) {
+    console.error('prebuilt node-pty fallback also failed:', e2 && e2.message);
+    throw e; // rethrow the original error so the process still fails loudly
+  }
+}
 const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 
+// Simple CORS for local development so the Next frontend (usually on :3000)
+// can POST files to this backend on :3001. In production use a stricter policy.
+app.use((req, res, next) => {
+  // permissive CORS for local dev; include credentials header to be explicit.
+  // Note: when Access-Control-Allow-Origin is '*', browsers won't send credentials.
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    // respond to preflight immediately
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // WebSocket server used for terminal pty proxying
 const fs = require('fs');
 const wss = new WebSocket.Server({ server, path: '/pty' });
+const multer = require('multer');
+const uploadDir = path.resolve(__dirname, 'uploads');
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// configure multer for uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // keep original name; in production you might want to sanitize or add a UUID
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage: storage, limits: { fileSize: 50 * 1024 * 1024 } }); // 50MBf
+
+// POST /upload to receive files for Python scripts. exposes uploaded files at /files/<name>
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'no file uploaded' });
+  res.json({ ok: true, filename: req.file.filename, path: `/files/${encodeURIComponent(req.file.filename)}` });
+});
+
+// static serve uploaded files
+app.use('/files', express.static(uploadDir));
 
 // simple health endpoint
 app.get('/health', (req, res) => res.json({ ok: true }));
+
+// list uploaded files as JSON
+app.get('/uploads', (req, res) => {
+  fs.readdir(uploadDir, (err, files) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const list = files.map((f) => ({ filename: f, path: `/files/${encodeURIComponent(f)}` }));
+    res.json({ ok: true, files: list });
+  });
+});
 
 wss.on('connection', (ws, req) => {
   console.log('pty: new websocket connection');
 
   // Resolve the python runner script relative to repo
   const runnerPath = path.resolve(__dirname, '..', 'python', 'runner', 'agent_runner.py');
-  const pythonBin = process.env.PYTHON_BIN || 'python3';
+  // Prefer an explicit PYTHON_BIN, otherwise fall back to the project's
+  // .venv python if present, then to system python3. This makes starting
+  // the backend with `npm start` still pick up the project's virtualenv.
+  let pythonBin = process.env.PYTHON_BIN || null;
+  try {
+    const venvPython = require('path').resolve(__dirname, '..', '.venv', 'bin', 'python');
+    const fs = require('fs');
+    if (!pythonBin && fs.existsSync(venvPython) && fs.statSync(venvPython).mode & 0o111) {
+      pythonBin = venvPython;
+    }
+  } catch (e) {
+    // ignore
+  }
+  if (!pythonBin) pythonBin = process.env.PYTHON_BIN || 'python3';
 
   console.log('pty: spawn requested', { pythonBin, runnerPath });
 
@@ -34,12 +110,16 @@ wss.on('connection', (ws, req) => {
         throw new Error('runner not found: ' + runnerPath);
       }
 
+      // spawn the python runner with its working directory set to the uploads
+      // directory and expose UPLOAD_DIR in the child's environment so it can
+      // restrict filesystem access.
+      const childEnv = Object.assign({}, process.env, { UPLOAD_DIR: uploadDir });
       shell = pty.spawn(pythonBin, ['-u', runnerPath], {
         name: 'xterm-color',
         cols: 80,
         rows: 24,
-        cwd: process.cwd(),
-        env: process.env,
+        cwd: uploadDir,
+        env: childEnv,
       });
 
       console.log('pty: spawned child', { pid: shell.pid });

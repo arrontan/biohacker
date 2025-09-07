@@ -1,6 +1,4 @@
 aws-opentelemetry-distro>=0.10.0
-bedrock-agentcore
-bedrock-agentcore-starter-toolkit
 boto3
 litellm
 mcp[cli]
@@ -8,19 +6,14 @@ nova-act
 opensearch-py
 pandas
 retrying
-strands-agents 
-strands-agents-tools[mem0_memory]
-streamlit
+strands-agents==1.7.1
+strands-agents-tools
 tqdm
 uv
-strands-agents>=1.0.0
-strands-agents-tools>=0.2.0
-bedrock-agentcore
-bedrock-agentcore-starter-toolkit
-streamlit
 
-opencv-python
-pyautogui
+# note: nova-act and some strands tools may be private; ensure network/credentials
+# are available during docker build if required.
+
 
 # Don't forget to create and activate your environment
 

@@ -1,0 +1,14 @@
+# Next.js build context ignores
+node_modules
+.next
+.next/**
+dist
+build
+.env.local
+.env
+.env.*
+.git
+.git/**
+.DS_Store
+npm-debug.log
+yarn-error.log

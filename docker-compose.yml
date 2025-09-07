@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: biohacker-backend:latest
+    restart: unless-stopped
+    environment:
+      - UPLOAD_DIR=/app/repl_state/uploads
+      - STRANDS_TOOL_CONSOLE_MODE=enabled
+    volumes:
+      - ./repl_state/uploads:/app/repl_state/uploads
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./.env
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/next-app/Dockerfile
+    image: biohacker-frontend:latest
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    env_file:
+      - ./.env

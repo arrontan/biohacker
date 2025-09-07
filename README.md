@@ -4,7 +4,7 @@
 
 As of 2025, there exists more than 20,000 bioinformatic tools, with more tools coming out each year.
 
-These programs are written by biologists, and are often not user-friendly, often with prohibitively complex installations and implementations, taking the user through multiple file formats. Combined with a culture of "publish and forget", many programs out there only cater to the specific needs of the research group. With a lack support, documentation, and given such a wide range of programs, hard-coding and integrating them all manually is unrealistic and unscaleable.
+These programs are written by biologists, and while they may be scientifically valuable, they are often not user-friendly, with prohibitively complex installations, workflows, and implementations. Combined with the prevailing culture of "publish and forget", many programs out there only cater to the specific needs of the research group. Given such a wide range of programs, mostly lacking adequate support and documentation, hard-coding and integrating them all manually is unrealistic and unscaleable.
 
 Biohacker addresses this issue by leveraging the available literature to provide a convenient frontend agent, together with a scalable backend suite of agents. Together we get you through the myriad of programs whilst maintaining flexibility, reliability, and reproducibility in your analyses. 
 
@@ -27,19 +27,14 @@ Biohacker addresses this issue by leveraging the available literature to provide
         - [x] fix software agent by breaking it up and making workflow explicit
         - [x] setup overall src structure
 - req.txt file
-- streamlit/react webapp
+- streamlit/react webapp UI
 - 10 slides and 5min video
 - logo
 
 ## Features
-- **Tool integration**: 
-<br>Get an overview of the tools suitable for your data, ask Biohacker about each tool's functionality, and seamlessly add them into your workflow
-<br>
-- **Real-time execution and monitoring**: 
-<br>Let Biohacker run your workflows automatically, whilst keeping you in the loop. Manually set parameters if needed
-<br>
-- **Reproducibility**: 
-<br>Keep a log of your workflow, execute it using different data sets to ensure reproducibility
+- **Tool integration** : Get an overview of the tools suitable for your data, ask Biohacker about each tool's functionality, and seamlessly add them into your workflow
+- **Real-time execution and monitoring** : Let Biohacker run your workflows automatically, whilst keeping you in the loop. Manually set parameters if needed
+- **Reproducibility** : Keep a log of your workflow, execute it using different data sets to ensure reproducibility
 
 <br>
 

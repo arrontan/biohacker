@@ -9,11 +9,23 @@ These programs are written by biologists, and while they may be scientifically v
 Biohacker addresses this issue by leveraging the available literature to provide a convenient frontend agent, together with a scalable backend suite of agents. Together we get you through the myriad of programs whilst maintaining flexibility, reliability, and reproducibility in your analyses. 
 
 ## TODO
-- Workflow map (Arron)
-- src
-    - Primary AGI (Madhu)
-    - Software AGI (Arron)
-    - Web scraping tool (Arron)
+- src 
+    - Madhu: 
+        - [ ] data_cleaner
+        - [ ] refine lit assistant prompt 
+        - [ ] add scraper tools to add on to knowledge base
+        - [x] add pubmed to test knowledge base
+        - [x] setup faiss knowledge base
+    - Arron: 
+        - [ ] make UI, fix enter bug
+        - [ ] make it usable on windows (maybe docker?)
+        - [ ] make output stream async
+        - [ ] split software_assistant, see if it runs faster
+        - [ ] try agent_graph/diagram, handoff_to_user, batch, browser, use_computer, swarm,
+        - [x] get all test cases working
+        - [ ] get the literature agent to fact check the output of code agent
+        - [x] fix software agent by breaking it up and making workflow explicit
+        - [x] setup overall src structure
 - req.txt file
 - streamlit/react webapp UI
 - 10 slides and 5min video
@@ -27,38 +39,43 @@ Biohacker addresses this issue by leveraging the available literature to provide
 <br>
 
 **Upcoming features:**
+- Store user's input in memory
+- Search with images
 - Interactive workflow map with tool integration
 - Sharing and collaboration for workflows
 - Benchmarking against existing methods
+- Download software directly to local machine
 
-**Current agents:**
+**Current software tested:**
 - Bioconductor (Suite of data analysis and visualisation packages for different -omics data)
 - GROMACS (Molecular simulation)
 - ImageJ (Image analysis)
-
-**Upcoming agents:**
-- Samtools (SNV identification in WGS data)
-- BEDTools (ChIPseq data)
-- GATK, DNAnexus, Illumina (Variant discovery in sequencing data)
-- Autodock, Vina (Molecular docking simulations)
-- And many more!
-
+- PyMOL (Molecular visualisation)
 
 **Other bioinformatic tool databases that may be helpful:**
-- [Bio tools](bio.tools)
+- [Nature Methods](https://www.nature.com/nmeth/)
+- [PubMed](https://pubmed.ncbi.nlm.nih.gov/)
+- [GenBank](https://www.ncbi.nlm.nih.gov/genbank/)
+- [PROSITE](https://prosite.expasy.org/)
+- [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+- [bio.tools](https://bio.tools/)
 - [NAR Database](https://www.oxfordjournals.org/nar/database/c/)
 - [OBRC](https://www.hsls.pitt.edu/obrc/)
-- [Startbioinfo](startbioinfo.org)
+- [StartBioInfo](https://startbioinfo.org/)
 
 ---
 ## Installation
 
-### Prerequisites
-Make sure you have the following installed:
-- Python 3
-- pip
-
 ### Setup
+
+> **Optionally:** Create a virtual environment to store your dependencies (activated by default with .envrc)
+```bash
+python -m venv .venv
+
+# macOS / Linux: source .venv/bin/activate
+# Windows (CMD): .venv\Scripts\activate.bat
+# Windows (PowerShell): .venv\Scripts\Activate.ps1
+```
 
 1. Clone the repository at https://github.com/arrontan/biohacker/
 ```bash
@@ -69,6 +86,13 @@ git clone https://github.com/arrontan/biohacker/
 ```bash
 pip install -r requirements.txt
 ```
+
+3. Enable Strands Console Mode (enabled by default in the .venv activation script) and run the agent.py file
+```bash
+export STRANDS_TOOL_CONSOLE_MODE=enabled
+python3 biohacker/agent.py
+```
+We are currently working on a friendlier web-app, as well as a downloadable application, so do stay tuned!
 
 > **Note:** Ensure that you have the required API keys configured in your environment before using the tool.
 
@@ -92,18 +116,10 @@ set AWS_ACCESS_KEY_ID=your_access_key_id
 set AWS_SECRET_ACCESS_KEY=your_secret_access_key
 set AWS_SESSION_TOKEN=your_session_token # Optional
 ```
-## Usage
-To start using the project, run the following command in the terminal:
-```bash
-python agent.py
-```
-We are currently working on a friendlier web-app, as well as a downloadable application, so do stay tuned!
+
 
 ## License
 This project is licensed under the [Apache 2.0](https://github.com/arrontan/biohacker/blob/main/LICENSE) license.
 
 ## Contributing 
-WIP
-
-## References
-WIP
+Contributors are welcome! Please fork this repo and create a pull request

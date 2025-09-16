@@ -14,7 +14,13 @@ from software_assistant import software_assistant
 from literature_assistant import literature_assistant
 from no_expertise import general_assistant
 # from code_researcher_assistant import code_researcher_assistant
+from strands import Agent
+from strands.session.file_session_manager import FileSessionManager
 
+session_manager = FileSessionManager(
+    session_id="user",
+    storage_dir="repl_state"  # Optional, defaults to a temp directory
+)
 
 # Define a focused system prompt for file operations
 BIOHACKER_PROMPT = """
@@ -47,6 +53,7 @@ Always confirm your understanding before routing to ensure accurate assistance.
 biohacker_agent = Agent(
     system_prompt=BIOHACKER_PROMPT,
     callback_handler=None,
+    session_manager=session_manager,
     tools=[data_cleaning_assistant, software_assistant, literature_assistant, general_assistant, handoff_to_user],
 )
 

@@ -34,3 +34,5 @@ LICENSE
 .editorconfig
 .aws
 .aws/**
+
+repl_state/

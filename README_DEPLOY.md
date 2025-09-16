@@ -258,6 +258,7 @@ SMTP URL examples:
 
 ## Future work (not in this doc)
 - Implement ephemeral job containers for user jobs (spawned on demand, mount user storage, enforce resource limits).
+- Add shared container with default apps like python and R
 - Add multi-tenant storage quotas, scheduled storage accounting, and cleanup jobs.
 - Migrate orchestration to Docker Swarm or Kubernetes for scale.
 

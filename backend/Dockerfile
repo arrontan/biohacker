@@ -16,6 +16,8 @@ RUN apt-get update \
     python3-pip \
     build-essential \
     pkg-config \
+    cmake \
+    ninja-build \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -53,6 +55,7 @@ RUN python3 -m venv /opt/venv && \
   rm -rf /root/.cache/pip /tmp/pip-* || true
 
 ENV PYTHON_BIN=/opt/venv/bin/python
+ENV PATH=/opt/venv/bin:${PATH}
 
 # Copy libnode from the nodebase stage so that native addons compiled
 # here can find the lib at runtime (libnode.so.*). We copy any matching

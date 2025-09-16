@@ -38,7 +38,12 @@ app.use((req, res, next) => {
 const fs = require('fs');
 const wss = new WebSocket.Server({ server, path: '/pty' });
 const multer = require('multer');
-const uploadDir = path.resolve(__dirname, 'uploads');
+// Determine the uploads directory. Prefer an explicit UPLOAD_DIR environment
+// variable (set by docker-compose) but fall back to backend/uploads when
+// unspecified. This lets a compose mount like ./repl_state:/app/repl_state be
+// authoritative while preserving local dev behaviour.
+const defaultUploadDir = path.resolve(__dirname, 'uploads');
+const uploadDir = process.env.UPLOAD_DIR || defaultUploadDir;
 
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -58,8 +63,14 @@ const upload = multer({ storage: storage, limits: { fileSize: 50 * 1024 * 1024 }
 
 // POST /upload to receive files for Python scripts. exposes uploaded files at /files/<name>
 app.post('/upload', upload.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'no file uploaded' });
-  res.json({ ok: true, filename: req.file.filename, path: `/files/${encodeURIComponent(req.file.filename)}` });
+  try {
+    if (!req.file) return res.status(400).json({ error: 'no file uploaded' });
+    res.json({ ok: true, filename: req.file.filename, path: `/files/${encodeURIComponent(req.file.filename)}` });
+  } catch (err) {
+    console.error('upload handler error', err && err.stack || err);
+    // Ensure we send JSON so the frontend doesn't attempt to parse HTML
+    res.status(500).json({ error: err && err.message ? err.message : 'internal server error' });
+  }
 });
 
 // static serve uploaded files
@@ -71,7 +82,10 @@ app.get('/health', (req, res) => res.json({ ok: true }));
 // list uploaded files as JSON
 app.get('/uploads', (req, res) => {
   fs.readdir(uploadDir, (err, files) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error('uploads list error for', uploadDir, err && err.stack || err);
+      return res.status(500).json({ error: err.message });
+    }
     const list = files.map((f) => ({ filename: f, path: `/files/${encodeURIComponent(f)}` }));
     res.json({ ok: true, files: list });
   });
@@ -113,7 +127,13 @@ wss.on('connection', (ws, req) => {
       // spawn the python runner with its working directory set to the uploads
       // directory and expose UPLOAD_DIR in the child's environment so it can
       // restrict filesystem access.
-      const childEnv = Object.assign({}, process.env, { UPLOAD_DIR: uploadDir });
+      // Preserve any UPLOAD_DIR already present in process.env (for example from
+      // docker-compose). Only set UPLOAD_DIR for the child when it isn't defined
+      // in the environment, which avoids overwriting a mounted path.
+      const childEnv = Object.assign({}, process.env);
+      if (!childEnv.UPLOAD_DIR) {
+        childEnv.UPLOAD_DIR = uploadDir;
+      }
       shell = pty.spawn(pythonBin, ['-u', runnerPath], {
         name: 'xterm-color',
         cols: 80,
@@ -215,4 +235,11 @@ wss.on('connection', (ws, req) => {
 const PORT = process.env.PTY_PORT || 3001;
 server.listen(PORT, () => {
   console.log(`PTY WebSocket server listening on :${PORT} (path=/pty)`);
+});
+
+// Global error handler - ensures JSON responses for uncaught errors
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error', err && err.stack || err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: err && err.message ? err.message : 'internal server error' });
 });

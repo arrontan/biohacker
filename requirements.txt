@@ -11,6 +11,7 @@ strands-agents-tools
 streamlit
 tqdm
 uv
+strands>=1.0.0
 strands-agents>=1.0.0
 strands-agents-tools>=0.2.0
 

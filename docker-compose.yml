@@ -9,7 +9,8 @@ services:
       - UPLOAD_DIR=/app/repl_state/uploads
       - STRANDS_TOOL_CONSOLE_MODE=enabled
     volumes:
-      - ./repl_state/uploads:/app/repl_state/uploads
+      # Mount the entire repl_state directory so uploads and session state
+      - ./repl_state:/app/repl_state
     ports:
       - "3001:3001"
     env_file:
@@ -17,12 +18,15 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: frontend/next-app/Dockerfile
+      context: ./frontend/next-app
+      dockerfile: Dockerfile
+      args:
+        BACKEND_URL: http://backend:3001
     image: biohacker-frontend:latest
     restart: unless-stopped
     environment:
       - NODE_ENV=production
+      - BACKEND_URL=http://backend:3001
     ports:
       - "3000:3000"
     depends_on:

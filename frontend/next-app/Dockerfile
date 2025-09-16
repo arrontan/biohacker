@@ -3,11 +3,13 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Install build deps
-COPY frontend/next-app/package*.json ./
+COPY package*.json ./
 RUN npm ci
 
 # Copy sources and build
-COPY frontend/next-app/ ./
+COPY . ./
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
 RUN npm run build
 
 ### Production image
